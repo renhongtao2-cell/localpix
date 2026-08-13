@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Bulk Image Resize for Amazon, Etsy &amp; Shopify</title>
+<meta name="description" content="Resize product images to marketplace dimensions — Amazon, Etsy, Shopify, eBay. LocalPix fits your photos to spec in the browser, with no upload and no per-image fee. Free, unlimited." />
+<style>
+  :root{
+    --purple:#7C3AED;--cyan:#06B6D4;--ink:#0F172A;--muted:#475569;
+    --line:#E2E8F0;--bg:#FFFFFF;--soft:#F8FAFC;
+    --grad:linear-gradient(120deg,var(--purple),var(--cyan));
+    --radius:16px;--shadow:0 10px 30px rgba(15,23,42,.08);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;color:var(--ink);background:var(--bg);line-height:1.65;-webkit-font-smoothing:antialiased}
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:820px;margin:0 auto;padding:0 22px}
+  .grad-text{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+  nav{display:flex;align-items:center;justify-content:space-between;padding:18px 0;border-bottom:1px solid var(--line)}
+  .brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:20px;letter-spacing:-.02em}
+  .brand .dot{width:26px;height:26px;border-radius:8px;background:var(--grad);display:inline-block}
+  .nav-links{display:flex;gap:22px;align-items:center;font-size:14px;color:var(--muted);font-weight:600}
+  .nav-links a:hover{color:var(--ink)}
+  .btn{display:inline-block;font-weight:700;border:none;cursor:pointer;text-decoration:none;border-radius:999px;padding:11px 22px;font-size:14px;transition:.15s}
+  .btn-primary{background:var(--grad);color:#fff;box-shadow:var(--shadow)}
+  .btn-primary:hover{opacity:.92;transform:translateY(-1px)}
+  .breadcrumb{font-size:13px;color:var(--muted);margin:26px 0 4px;font-weight:600}
+  .breadcrumb a:hover{color:var(--purple)}
+  h1{font-size:clamp(28px,4.5vw,42px);line-height:1.12;letter-spacing:-.03em;font-weight:800;margin:6px 0 14px}
+  .lead{font-size:18px;color:var(--muted);margin-bottom:30px}
+  h2{font-size:24px;font-weight:800;letter-spacing:-.02em;margin:38px 0 12px}
+  h3{font-size:18px;margin:22px 0 8px}
+  p{margin-bottom:14px}
+  ul{margin:0 0 16px 20px}
+  li{margin-bottom:8px}
+  .spec{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:18px 0}
+  .spec div{border:1px solid var(--line);border-radius:12px;padding:14px 16px;background:var(--soft)}
+  .spec b{display:block;font-size:15px;margin-bottom:2px}
+  .spec span{font-size:13px;color:var(--muted)}
+  .cta{background:var(--soft);border:1px solid var(--line);border-radius:var(--radius);padding:26px;text-align:center;margin:34px 0}
+  .cta h3{margin-top:0}
+  .faq{display:grid;gap:12px;margin:18px 0}
+  .faq-item{border:1px solid var(--line);border-radius:12px;padding:16px 18px;background:#fff}
+  .faq-item h4{font-size:15px;margin-bottom:6px}
+  .faq-item p{font-size:14px;color:var(--muted);margin:0}
+  footer{padding:36px 0;border-top:1px solid var(--line);text-align:center;color:var(--muted);font-size:14px;margin-top:40px}
+  footer .lock{color:var(--purple);font-weight:700}
+  @media(max-width:760px){.nav-links{display:none}.spec{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<nav class="wrap">
+  <div class="brand"><span class="dot"></span>LocalPix</div>
+  <div class="nav-links">
+    <a href="index.html#demo">Free Tools</a>
+    <a href="index.html#why">Why us</a>
+    <a href="index.html#faq">FAQ</a>
+    <a href="index.html#pricing">Pricing</a>
+  </div>
+  <a href="index.html#demo" class="btn btn-primary">Try it free</a>
+</nav>
+
+<article class="wrap">
+  <div class="breadcrumb"><a href="index.html">LocalPix</a> › Guides › Bulk Image Resize</div>
+  <h1>Resize Product Images for <span class="grad-text">Amazon, Etsy &amp; Shopify</span></h1>
+  <p class="lead">Every marketplace wants a different image size. Instead of paying a per-image fee or uploading your catalog to a cloud tool, fit your photos to spec <strong>in your browser</strong> — no upload, no watermark, no credit meter.</p>
+
+  <h2>Common marketplace image specs</h2>
+  <p>These are typical target widths sellers aim for (always check the latest official guidelines for your category):</p>
+  <div class="spec">
+    <div><b>Amazon</b><span>Longest side ≥ 1000px for zoom; 2000px recommended</span></div>
+    <div><b>Etsy</b><span>~2000px on the shortest side for crisp listings</span></div>
+    <div><b>Shopify</b><span>2048px max; ~800–1000px ideal for fast load</span></div>
+    <div><b>eBay</b><span>Up to 1600px on longest side</span></div>
+  </div>
+
+  <h2>How to resize without uploading</h2>
+  <ul>
+    <li><strong>Drop in your photo</strong> — processed locally, never sent to a server.</li>
+    <li><strong>Enter target width</strong> — height scales automatically to keep proportions.</li>
+    <li><strong>Download</strong> — get a clean PNG fitted to your marketplace spec.</li>
+  </ul>
+  <p>For a full catalog, the Pro plan adds batch processing so you can size a folder of images in one pass instead of one at a time.</p>
+
+  <h2>Why local-first sizing wins</h2>
+  <p>Cloud resizers make you upload the whole catalog before you see a result — slow, and a privacy risk for unreleased products. LocalPix resizes on your device, so a 500-photo batch is just as private as a single file. Free plan covers single-image resizing; batch is the Pro upgrade.</p>
+
+  <div class="cta">
+    <h3>Resize an image now — free, no upload</h3>
+    <p style="color:var(--muted);margin:8px 0 16px">Runs 100% in your browser. Your photo never leaves your device.</p>
+    <a href="index.html#demo" class="btn btn-primary">Open the free tool →</a>
+  </div>
+
+  <h2>FAQ</h2>
+  <div class="faq">
+    <div class="faq-item"><h4>Will it keep the aspect ratio?</h4><p>Yes. Enter a target width and the height scales proportionally.</p></div>
+    <div class="faq-item"><h4>Is batch resize free?</h4><p>Single-image resize is free; batch processing is part of Pro.</p></div>
+    <div class="faq-item"><h4>Do you upload my catalog?</h4><p>No. Everything runs locally in your browser.</p></div>
+    <div class="faq-item"><h4>What format do I get?</h4><p>PNG by default, so transparent backgrounds are preserved.</p></div>
+  </div>
+</article>
+
+<footer>
+  <p><span class="lock">🔒 Your files never leave your browser.</span></p>
+  <p style="margin-top:8px;opacity:.7">LocalPix — local-first image toolkit for sellers &amp; creators.</p>
+</footer>
+</body>
+</html>
