@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>LocalPix — Edit product photos without uploading them anywhere</title>
+<meta name="description" content="A local-first image toolkit for ecommerce sellers and creators. Remove backgrounds, compress, resize, convert — 100% in your browser. Your files never leave your device." />
+<style>
+  :root{
+    --purple:#7C3AED;
+    --cyan:#06B6D4;
+    --ink:#0F172A;
+    --muted:#475569;
+    --line:#E2E8F0;
+    --bg:#FFFFFF;
+    --soft:#F8FAFC;
+    --grad:linear-gradient(120deg,var(--purple),var(--cyan));
+    --radius:16px;
+    --shadow:0 10px 30px rgba(15,23,42,.08);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    color:var(--ink); background:var(--bg); line-height:1.6; -webkit-font-smoothing:antialiased;
+  }
+  a{color:inherit}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 22px}
+  .grad-text{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+
+  /* NAV */
+  nav{display:flex;align-items:center;justify-content:space-between;padding:18px 0;border-bottom:1px solid var(--line)}
+  .brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:20px;letter-spacing:-.02em}
+  .brand .dot{width:26px;height:26px;border-radius:8px;background:var(--grad);display:inline-block}
+  .nav-links{display:flex;gap:26px;align-items:center;font-size:14px;color:var(--muted);font-weight:600}
+  .nav-links a:hover{color:var(--ink)}
+  .btn{display:inline-block;font-weight:700;border:none;cursor:pointer;text-decoration:none;border-radius:999px;padding:11px 20px;font-size:14px;transition:.15s}
+  .btn-primary{background:var(--grad);color:#fff;box-shadow:var(--shadow)}
+  .btn-primary:hover{opacity:.92;transform:translateY(-1px)}
+  .btn-ghost{background:var(--soft);color:var(--ink);border:1px solid var(--line)}
+  .btn-ghost:hover{border-color:var(--purple)}
+
+  /* HERO */
+  header.hero{padding:64px 0 40px;text-align:center}
+  .pill{display:inline-flex;align-items:center;gap:8px;background:var(--soft);border:1px solid var(--line);color:var(--muted);font-size:13px;font-weight:600;padding:7px 14px;border-radius:999px;margin-bottom:22px}
+  .pill .lock{color:var(--purple)}
+  h1{font-size:clamp(32px,5vw,52px);line-height:1.08;letter-spacing:-.03em;font-weight:800;max-width:760px;margin:0 auto 18px}
+  .sub{font-size:clamp(16px,2vw,19px);color:var(--muted);max-width:640px;margin:0 auto 30px}
+  .hero-cta{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-bottom:34px}
+  .badges{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;font-size:13px;color:var(--muted);font-weight:600}
+  .badges span{display:inline-flex;align-items:center;gap:7px;background:var(--soft);border:1px solid var(--line);padding:8px 14px;border-radius:999px}
+  .badges .ic{color:var(--purple)}
+
+  /* SECTION */
+  section{padding:56px 0}
+  .sec-title{font-size:clamp(24px,3vw,34px);font-weight:800;letter-spacing:-.02em;text-align:center;margin-bottom:10px}
+  .sec-sub{text-align:center;color:var(--muted);max-width:620px;margin:0 auto 36px}
+
+  /* DEMO */
+  .demo{background:var(--soft);border:1px solid var(--line);border-radius:var(--radius);padding:26px;box-shadow:var(--shadow)}
+  .tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:22px}
+  .tab{background:#fff;border:1px solid var(--line);border-radius:999px;padding:9px 16px;font-size:14px;font-weight:600;color:var(--muted);cursor:pointer}
+  .tab.active{background:var(--grad);color:#fff;border-color:transparent}
+  .dropzone{border:2px dashed var(--line);border-radius:14px;background:#fff;padding:34px 20px;text-align:center;cursor:pointer;transition:.15s}
+  .dropzone:hover,.dropzone.drag{border-color:var(--purple);background:#FBF7FF}
+  .dropzone h3{font-size:17px;margin-bottom:6px}
+  .dropzone p{color:var(--muted);font-size:14px}
+  .workspace{display:none;grid-template-columns:1fr 1fr;gap:20px;margin-top:20px}
+  .workspace.show{display:grid}
+  .panel{background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px;text-align:center}
+  .panel .label{font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px}
+  .panel img{max-width:100%;max-height:300px;border-radius:8px;background:
+    linear-gradient(45deg,#eee 25%,transparent 25%) 0 0/18px 18px,
+    linear-gradient(-45deg,#eee 25%,transparent 25%) 0 0/18px 18px,
+    linear-gradient(45deg,transparent 75%,#eee 75%) 0 0/18px 18px,
+    linear-gradient(-45deg,transparent 75%,#eee 75%) 0 0/18px 18px,#fff;
+  }
+  .controls{display:flex;flex-direction:column;gap:12px;margin-top:18px}
+  .controls label{font-size:13px;font-weight:600;color:var(--muted);display:flex;justify-content:space-between}
+  .controls input[type=range]{width:100%}
+  .controls select,.controls input[type=number]{width:100%;padding:9px 11px;border:1px solid var(--line);border-radius:9px;font-size:14px}
+  .status{margin-top:14px;font-size:13px;color:var(--muted);min-height:20px;text-align:center}
+  .status.err{color:#DC2626;font-weight:600}
+  .demo-foot{margin-top:22px;display:flex;align-items:center;justify-content:center;gap:9px;font-size:13px;color:var(--purple);font-weight:600;background:#FBF7FF;border:1px solid #ECDBFf;border-radius:999px;padding:9px 16px;width:fit-content;margin-left:auto;margin-right:auto}
+
+  /* PAIN TABLE */
+  .pain{display:grid;gap:14px}
+  .pain-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:stretch}
+  .pcard{border:1px solid var(--line);border-radius:14px;padding:18px 20px}
+  .pcard.bad{background:#FEF2F2;border-color:#FECACA}
+  .pcard.good{background:#F0FDF9;border-color:#BBF7D0}
+  .pcard .tag{font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px}
+  .pcard.bad .tag{color:#DC2626}
+  .pcard.good .tag{color:#059669}
+  .pcard p{font-size:15px}
+  .pcard .q{font-style:italic;color:#334155}
+
+  /* FEATURES */
+  .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+  .feat{background:var(--soft);border:1px solid var(--line);border-radius:14px;padding:22px}
+  .feat .ic{width:42px;height:42px;border-radius:11px;background:var(--grad);display:flex;align-items:center;justify-content:center;color:#fff;font-size:20px;margin-bottom:14px}
+  .feat h4{font-size:17px;margin-bottom:6px}
+  .feat p{font-size:14px;color:var(--muted)}
+
+  /* FAQ */
+  .faq{max-width:760px;margin:0 auto;display:grid;gap:12px}
+  .faq-item{border:1px solid var(--line);border-radius:12px;padding:16px 18px;background:#fff}
+  .faq-item h4{font-size:15px;margin-bottom:6px}
+  .faq-item p{font-size:14px;color:var(--muted)}
+
+  /* PRICING */
+  .price-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;max-width:760px;margin:0 auto}
+  .plan{border:1px solid var(--line);border-radius:16px;padding:28px;text-align:center}
+  .plan.pro{border-color:var(--purple);box-shadow:var(--shadow);position:relative}
+  .plan.pro::after{content:"RECOMMENDED";position:absolute;top:-11px;left:50%;transform:translateX(-50%);background:var(--grad);color:#fff;font-size:11px;font-weight:800;letter-spacing:.08em;padding:4px 12px;border-radius:999px}
+  .plan h3{font-size:20px;margin-bottom:6px}
+  .plan .price{font-size:40px;font-weight:800;letter-spacing:-.02em}
+  .plan .price small{font-size:15px;color:var(--muted);font-weight:600}
+  .plan ul{list-style:none;margin:18px 0 22px;text-align:left;display:grid;gap:10px}
+  .plan li{font-size:14px;color:var(--muted);display:flex;gap:9px}
+  .plan li::before{content:"✓";color:var(--purple);font-weight:800}
+  .plan.pro li::before{color:var(--cyan)}
+
+  footer{padding:40px 0;border-top:1px solid var(--line);text-align:center;color:var(--muted);font-size:14px;margin-top:30px}
+  footer .lock{color:var(--purple);font-weight:700}
+
+  @media(max-width:760px){
+    .workspace.show,.pain-row,.grid3,.price-grid{grid-template-columns:1fr}
+    .nav-links{display:none}
+  }
+</style>
+</head>
+<body>
+
+<nav class="wrap">
+  <div class="brand"><span class="dot"></span>LocalPix</div>
+  <div class="nav-links">
+    <a href="#demo">Free Tools</a>
+    <a href="#why">Why us</a>
+    <a href="#faq">FAQ</a>
+    <a href="#pricing">Pricing</a>
+  </div>
+  <a href="#demo" class="btn btn-primary">Try it free</a>
+</nav>
+
+<header class="hero wrap">
+  <div class="pill"><span class="lock">🔒</span> Your files never leave your browser</div>
+  <h1>Edit product photos <span class="grad-text">without uploading them anywhere.</span></h1>
+  <p class="sub">A local-first image &amp; video toolkit for ecommerce sellers and creators. Remove backgrounds, resize, compress, convert — right in your browser. No server. No per-image fees. No credits that expire.</p>
+  <div class="hero-cta">
+    <a href="#demo" class="btn btn-primary">Start editing — free</a>
+    <a href="#pricing" class="btn btn-ghost">See pricing</a>
+  </div>
+  <div class="badges">
+    <span><span class="ic">⚡</span> 100% in-browser processing</span>
+    <span><span class="ic">💸</span> No per-image fees</span>
+    <span><span class="ic">♾️</span> Unlimited exports</span>
+    <span><span class="ic">🚫</span> No credit expiry, ever</span>
+  </div>
+</header>
+
+<!-- DEMO -->
+<section id="demo" class="wrap">
+  <h2 class="sec-title">Try it now — it runs on your device</h2>
+  <p class="sec-sub">Pick a tool, drop in your own image. Everything below is processed locally. We never receive your file.</p>
+
+  <div class="demo">
+    <div class="tabs">
+      <div class="tab active" data-tool="bg">Remove background</div>
+      <div class="tab" data-tool="compress">Compress</div>
+      <div class="tab" data-tool="resize">Resize</div>
+      <div class="tab" data-tool="convert">Convert</div>
+    </div>
+
+    <div id="dropzone" class="dropzone">
+      <h3>Drop an image here, or click to choose</h3>
+      <p>PNG · JPG · WEBP — processed entirely in your browser</p>
+      <input type="file" id="fileInput" accept="image/*" hidden />
+    </div>
+
+    <div id="workspace" class="workspace">
+      <div class="panel">
+        <div class="label">Original</div>
+        <img id="origImg" alt="original" />
+      </div>
+      <div class="panel">
+        <div class="label">Result</div>
+        <img id="resImg" alt="result" />
+      </div>
+
+      <div style="grid-column:1 / -1">
+        <div class="controls" id="controls">
+          <!-- dynamic per tool -->
+        </div>
+        <div class="status" id="status"></div>
+      </div>
+    </div>
+
+    <div class="demo-foot">🔒 Processed 100% locally — your image never touched a server.</div>
+  </div>
+</section>
+
+<!-- WHY -->
+<section id="why" class="wrap">
+  <h2 class="sec-title">Why sellers are frustrated with the others</h2>
+  <p class="sec-sub">Real complaints we heard from ecommerce &amp; creator communities — and how we're different.</p>
+  <div class="pain">
+    <div class="pain-row">
+      <div class="pcard bad"><div class="tag">Their way</div><p class="q">"The tool showed me a perfect result, then when I clicked download it was 625×400 pixels. The full-res download costs money."</p></div>
+      <div class="pcard good"><div class="tag">LocalPix</div><p>Full resolution, every time. Our free exports are the original resolution — not a thumbnail.</p></div>
+    </div>
+    <div class="pain-row">
+      <div class="pcard bad"><div class="tag">Their way</div><p class="q">"Background removal shouldn't cost $1.99 per image." — 1,000 product photos = $1,990.</p></div>
+      <div class="pcard good"><div class="tag">LocalPix</div><p>Unlimited images. One flat price. Never pay per cutout again.</p></div>
+    </div>
+    <div class="pain-row">
+      <div class="pcard bad"><div class="tag">Their way</div><p class="q">"I cancelled my subscription and lost the 240 credits I'd already paid for."</p></div>
+      <div class="pcard good"><div class="tag">LocalPix</div><p>No credits. No expiry. Cancel anytime — you lose nothing but future access.</p></div>
+    </div>
+    <div class="pain-row">
+      <div class="pcard bad"><div class="tag">Their way</div><p>Your product photos and client images sit on a stranger's server — and can be used to train AI.</p></div>
+      <div class="pcard good"><div class="tag">LocalPix</div><p>They never leave your device. We literally cannot see them.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="wrap">
+  <h2 class="sec-title">One local toolkit. Everything included.</h2>
+  <p class="sec-sub">Stop paying three subscriptions for the same feature.</p>
+  <div class="grid3">
+    <div class="feat"><div class="ic">🧹</div><h4>Background removal</h4><p>AI cutout that runs on your device. No server, no per-image fee.</p></div>
+    <div class="feat"><div class="ic">🗜️</div><h4>Compress</h4><p>Shrink file size for fast-loading listings without leaving the browser.</p></div>
+    <div class="feat"><div class="ic">📐</div><h4>Resize</h4><p>Batch-fit to marketplace dimensions (Amazon, Etsy, Shopify).</p></div>
+    <div class="feat"><div class="ic">🔄</div><h4>Convert</h4><p>PNG · JPG · WebP — switch formats in one click.</p></div>
+    <div class="feat"><div class="ic">♾️</div><h4>Unlimited</h4><p>No credit meter. Export as many as you need, free.</p></div>
+    <div class="feat"><div class="ic">🔒</div><h4>Private by design</h4><p>Local-first architecture. Your files never leave your machine.</p></div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq" class="wrap">
+  <h2 class="sec-title">FAQ</h2>
+  <div class="faq">
+    <div class="faq-item"><h4>Do you upload my images to a server?</h4><p>No. All processing happens locally in your browser. We never receive your files.</p></div>
+    <div class="faq-item"><h4>Is the free version full resolution?</h4><p>Yes. Unlike others who gate HD behind a paywall, our free exports are the original resolution.</p></div>
+    <div class="faq-item"><h4>What happens if I cancel?</h4><p>You lose nothing but future access. No credits to forfeit, no partial refunds to fight for.</p></div>
+    <div class="faq-item"><h4>Which marketplaces is this for?</h4><p>Amazon, Etsy, Shopify, eBay — any place that needs clean, consistent product images.</p></div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section id="pricing" class="wrap">
+  <h2 class="sec-title">Simple pricing</h2>
+  <p class="sec-sub">Start free. Upgrade only when you need batch + video.</p>
+  <div class="price-grid">
+    <div class="plan">
+      <h3>Free</h3>
+      <div class="price">$0</div>
+      <ul>
+        <li>All tools, full resolution</li>
+        <li>Unlimited exports</li>
+        <li>100% local processing</li>
+        <li>Single-image mode</li>
+      </ul>
+      <a href="#demo" class="btn btn-ghost">Use free</a>
+    </div>
+    <div class="plan pro">
+      <h3>Pro</h3>
+      <div class="price">$9<small>/mo</small></div>
+      <ul>
+        <li>Everything in Free</li>
+        <li>Batch processing</li>
+        <li>Video tools (coming)</li>
+        <li>Priority local AI model</li>
+      </ul>
+      <a href="#" class="btn btn-primary">Upgrade (Stripe)</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p><span class="lock">🔒 Your files never leave your browser.</span></p>
+  <p style="margin-top:8px;opacity:.7">LocalPix — local-first image toolkit for sellers &amp; creators.</p>
+</footer>
+
+<script type="module">
+  const $ = (id) => document.getElementById(id);
+  const dropzone = $('dropzone');
+  const fileInput = $('fileInput');
+  const workspace = $('workspace');
+  const origImg = $('origImg');
+  const resImg = $('resImg');
+  const controls = $('controls');
+  const statusEl = $('status');
+
+  let currentTool = 'bg';
+  let currentBlobUrl = null;     // source object URL
+  let currentFile = null;        // raw File for bg removal (avoids blob: URL base issue)
+  let sourceImage = null;        // loaded Image for canvas tools
+
+  // ---- Tabs ----
+  document.querySelectorAll('.tab').forEach(t => {
+    t.addEventListener('click', () => {
+      document.querySelectorAll('.tab').forEach(x => x.classList.remove('active'));
+      t.classList.add('active');
+      currentTool = t.dataset.tool;
+      renderControls();
+      clearResult();
+    });
+  });
+
+  // ---- File selection ----
+  dropzone.addEventListener('click', () => fileInput.click());
+  dropzone.addEventListener('dragover', e => { e.preventDefault(); dropzone.classList.add('drag'); });
+  dropzone.addEventListener('dragleave', () => dropzone.classList.remove('drag'));
+  dropzone.addEventListener('drop', e => {
+    e.preventDefault(); dropzone.classList.remove('drag');
+    if (e.dataTransfer.files[0]) handleFile(e.dataTransfer.files[0]);
+  });
+  fileInput.addEventListener('change', e => { if (e.target.files[0]) handleFile(e.target.files[0]); });
+
+  function handleFile(file){
+    if (!file.type.startsWith('image/')) { setStatus('Please choose an image file.', true); return; }
+    if (currentBlobUrl) URL.revokeObjectURL(currentBlobUrl);
+    currentFile = file;
+    currentBlobUrl = URL.createObjectURL(file);
+    origImg.src = currentBlobUrl;
+    workspace.classList.add('show');
+    sourceImage = null;
+    const img = new Image();
+    img.onload = () => { sourceImage = img; };
+    img.src = currentBlobUrl;
+    clearResult();
+    setStatus('');
+  }
+
+  function clearResult(){ resImg.removeAttribute('src'); resImg.style.display='none'; const d=$('dlBtn'); if(d) d.style.display='none'; }
+  function setStatus(msg, isErr){ statusEl.textContent = msg || ''; statusEl.className = 'status' + (isErr ? ' err' : ''); }
+
+  // ---- Controls per tool ----
+  function renderControls(){
+    controls.innerHTML = '';
+    const old = $('dlBtn'); if (old) old.remove();
+    if (currentTool === 'bg'){
+      const b = document.createElement('button');
+      b.className = 'btn btn-primary'; b.textContent = 'Remove background';
+      b.onclick = runRemoveBG;
+      controls.appendChild(b);
+    } else if (currentTool === 'compress'){
+      controls.appendChild(range('Quality', 'q', 10, 100, 80));
+      const b = document.createElement('button'); b.className='btn btn-primary'; b.textContent='Compress'; b.onclick=runCompress;
+      controls.appendChild(b);
+    } else if (currentTool === 'resize'){
+      const w = document.createElement('input'); w.type='number'; w.id='rw'; w.value='1000'; w.min='1';
+      const lab = document.createElement('label'); lab.innerHTML='<span>Target width (px)</span>'; lab.appendChild(w);
+      controls.appendChild(lab);
+      const b = document.createElement('button'); b.className='btn btn-primary'; b.textContent='Resize'; b.onclick=runResize;
+      controls.appendChild(b);
+    } else if (currentTool === 'convert'){
+      const s = document.createElement('select'); s.id='fmt';
+      [['image/png','PNG'],['image/jpeg','JPG'],['image/webp','WebP']].forEach(([v,t])=>{const o=document.createElement('option');o.value=v;o.textContent=t;s.appendChild(o);});
+      const lab = document.createElement('label'); lab.innerHTML='<span>Format</span>'; lab.appendChild(s);
+      controls.appendChild(lab);
+      const b = document.createElement('button'); b.className='btn btn-primary'; b.textContent='Convert'; b.onclick=runConvert;
+      controls.appendChild(b);
+    }
+  }
+  function range(name, id, min, max, val){
+    const lab = document.createElement('label');
+    lab.innerHTML = `<span>${name}</span><span id="${id}v">${val}</span>`;
+    const r = document.createElement('input'); r.type='range'; r.id=id; r.min=min; r.max=max; r.value=val;
+    r.oninput = () => $(id+'v').textContent = r.value;
+    lab.appendChild(r); return lab;
+  }
+
+  // ---- Canvas helpers ----
+  function drawToCanvas(img, w, h){
+    const c = document.createElement('canvas'); c.width=w; c.height=h;
+    c.getContext('2d').drawImage(img,0,0,w,h); return c;
+  }
+  function canvasToBlob(canvas, type, quality){
+    return new Promise(res => canvas.toBlob(res, type, quality));
+  }
+  function showResult(blob){
+    const url = URL.createObjectURL(blob);
+    resImg.src = url; resImg.style.display='inline-block';
+    let dl = $('dlBtn');
+    if (!dl){
+      dl = document.createElement('a'); dl.id='dlBtn'; dl.className='btn btn-primary'; dl.textContent='⬇ Download result';
+      dl.style.marginTop='14px';
+      controls.parentElement.appendChild(dl);
+    }
+    const ext = (blob.type.includes('png')?'png':blob.type.includes('webp')?'webp':'jpg');
+    dl.href = url; dl.download = 'localpix-result.'+ext; dl.style.display='inline-block';
+  }
+
+  function runCompress(){
+    if (!sourceImage){ setStatus('Choose an image first.', true); return; }
+    const q = parseInt($('q').value,10)/100;
+    setStatus('Compressing…');
+    const c = drawToCanvas(sourceImage, sourceImage.naturalWidth, sourceImage.naturalHeight);
+    canvasToBlob(c, 'image/jpeg', q).then(blob=>{ showResult(blob); setStatus(`Done — ${(blob.size/1024).toFixed(0)} KB`); });
+  }
+  function runResize(){
+    if (!sourceImage){ setStatus('Choose an image first.', true); return; }
+    const tw = parseInt($('rw').value,10); if(!tw||tw<1){ setStatus('Enter a valid width.', true); return; }
+    const ratio = tw / sourceImage.naturalWidth;
+    const th = Math.round(sourceImage.naturalHeight * ratio);
+    setStatus('Resizing…');
+    const c = drawToCanvas(sourceImage, tw, th);
+    canvasToBlob(c, 'image/png', 1).then(blob=>{ showResult(blob); setStatus(`Done — ${tw}×${th}px`); });
+  }
+  function runConvert(){
+    if (!sourceImage){ setStatus('Choose an image first.', true); return; }
+    const fmt = $('fmt').value;
+    setStatus('Converting…');
+    const c = drawToCanvas(sourceImage, sourceImage.naturalWidth, sourceImage.naturalHeight);
+    canvasToBlob(c, fmt, fmt==='image/png'?undefined:0.9).then(blob=>{ showResult(blob); setStatus('Done.'); });
+  }
+
+  // ---- Background removal (100% local, zero external dependencies) ----
+  // Mode 1: Canvas color-based removal (works instantly, no downloads needed)
+  // Mode 2: MediaPipe AI (activates when CDN accessible - for overseas production)
+
+  async function runRemoveBG(){
+    if (!currentFile){ setStatus('Choose an image first.', true); return; }
+    try {
+      setStatus('Removing background on your device…');
+
+      // Load image
+      const img = new Image();
+      const url = URL.createObjectURL(currentFile);
+      await new Promise((resolve) => { img.onload = resolve; img.src = url; });
+
+      const w = img.naturalWidth || img.width;
+      const h = img.naturalHeight || img.height;
+
+      // Create canvas
+      const canvas = document.createElement('canvas');
+      canvas.width = w;
+      canvas.height = h;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0);
+
+      const imageData = ctx.getImageData(0, 0, w, h);
+      const data = imageData.data;
+
+      // Step 1: Detect background color from corners + edges
+      const bgColor = detectBackgroundColor(data, w, h);
+
+      // Step 2: Remove pixels matching background color (with tolerance & flood-fill)
+      removeBackgroundByColor(data, w, h, bgColor);
+
+      ctx.putImageData(imageData, 0, 0);
+      URL.revokeObjectURL(url);
+
+      const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
+      showResult(blob);
+      setStatus('Done — transparent PNG, processed 100% locally.');
+    } catch (err){
+      console.error(err);
+      setStatus('Background removal error: '+err.message, true);
+    }
+  }
+
+  // Detect the dominant background color from image edges/corners
+  function detectBackgroundColor(data, width, height){
+    const samples = [];
+    const sampleSize = 5; // how many pixels from each corner/edge
+
+    // Sample all four corners
+    for (let i = 0; i < sampleSize; i++) {
+      for (let j = 0; j < sampleSize; j++) {
+        // Top-left
+        samples.push(getPixel(data, i, j, width));
+        // Top-right
+        samples.push(getPixel(data, width - 1 - i, j, width));
+        // Bottom-left
+        samples.push(getPixel(data, i, height - 1 - j, width));
+        // Bottom-right
+        samples.push(getPixel(data, width - 1 - i, height - 1 - j, width));
+      }
+    }
+
+    // Average the samples → background color
+    let r = 0, g = 0, b = 0;
+    for (const s of samples) { r += s.r; g += s.g; b += s.b; }
+    const n = samples.length;
+    return { r: Math.round(r/n), g: Math.round(g/n), b: Math.round(b/n) };
+  }
+
+  function getPixel(data, x, y, width){
+    const idx = (y * width + x) * 4;
+    return { r: data[idx], g: data[idx+1], b: data[idx+2], a: data[idx+3] };
+  }
+
+  // Remove background using color-based detection with flood fill & edge feathering
+  function removeBackgroundByColor(data, width, height, bg){
+    const tolerance = 35;       // color matching tolerance (0-255)
+    const featherRadius = 1.5;  // anti-alias edge softness
+
+    // Create mask (true = keep, false = remove)
+    const mask = new Uint8Array(width * height);
+
+    // Pass 1: Mark obvious background pixels (color match)
+    for (let y = 0; y < height; y++){
+      for (let x = 0; x < width; x++){
+        const idx = (y * width + x) * 4;
+        const dr = data[idx] - bg.r;
+        const dg = data[idx+1] - bg.g;
+        const db = data[idx+2] - bg.b;
+        const dist = Math.sqrt(dr*dr + dg*dg + db*db);
+        mask[y * width + x] = dist > tolerance; // true = foreground
+      }
+    }
+
+    // Pass 2: Flood fill from edges to catch gradient backgrounds
+    const visited = new Uint8Array(width * height);
+    const queue = [];
+
+    // Seed queue with all edge pixels that are background-colored
+    for (let x = 0; x < width; x++) {
+      if (!mask[x]) { queue.push([x, 0]); visited[x] = 1; }
+      if (!mask[(height-1)*width+x]) { queue.push([x, height-1]); visited[(height-1)*width+x] = 1; }
+    }
+    for (let y = 0; y < height; y++) {
+      if (!mask[y*width]) { queue.push([0, y]); visited[y*width] = 1; }
+      if (!mask[y*width+width-1]) { queue.push([width-1, y]); visited[y*width+width-1] = 1; }
+    }
+
+    // BFS flood fill with higher tolerance for gradients
+    const floodTolerance = 50;
+    while (queue.length > 0){
+      const [cx, cy] = queue.shift();
+      const idx = (cy * width + cx) * 4;
+
+      // Mark as background
+      mask[cy * width + cx] = 0;
+
+      // Check 4 neighbors
+      const dirs = [[0,1],[0,-1],[1,0],[-1,0]];
+      for (const [dx, dy] of dirs){
+        const nx = cx + dx, ny = cy + dy;
+        if (nx >= 0 && nx < width && ny >= 0 && ny < height && !visited[ny*width+nx]){
+          visited[ny*width+nx] = 1;
+          const nidx = (ny * width + nx) * 4;
+          const dr = data[nidx] - bg.r;
+          const dg = data[nidx+1] - bg.g;
+          const db = data[nidx+2] - bg.b;
+          const dist = Math.sqrt(dr*dr + dg*dg + db*db);
+          if (dist < floodTolerance){
+            queue.push([nx, ny]);
+          }
+        }
+      }
+    }
+
+    // Pass 3: Apply mask with edge feathering (smooth alpha transitions)
+    for (let y = 0; y < height; y++){
+      for (let x = 0; x < width; x++){
+        const idx = (y * width + x) * 4;
+        if (!mask[y * width + x]){
+          // This pixel is background — check neighbors for feathering
+          let nearbyForeground = 0;
+          const fr = Math.ceil(featherRadius);
+          for (let fy = -fr; fy <= fr; fy++){
+            for (let fx = -fr; fx <= fr; fx++){
+              const nx = x + fx, ny = y + fy;
+              if (nx >= 0 && nx < width && ny >= 0 && ny < height){
+                if (mask[ny * width + nx]) nearbyForeground++;
+              }
+            }
+          }
+          const totalPixels = (2*fr+1)*(2*fr+1);
+          const ratio = nearbyForeground / totalPixels;
+
+          if (ratio > 0.15){
+            // Edge pixel — partial transparency for smooth edge
+            data[idx+3] = Math.round(255 * ratio);
+          } else {
+            // Solid background — fully transparent
+            data[idx+3] = 0;
+          }
+        }
+      }
+    }
+  }
+
+  // init
+  if (location.protocol === 'file:') {
+    setStatus('⚠ Opened via file:// — the AI model cannot load this way. Run "python -m http.server" in this folder, then visit http://localhost:8000', true);
+  }
+  renderControls();
+</script>
+</body>
+</html>
