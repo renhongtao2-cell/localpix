@@ -5,6 +5,26 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>LocalPix — Edit product photos without uploading them anywhere</title>
 <meta name="description" content="A local-first image toolkit for ecommerce sellers and creators. Remove backgrounds, compress, resize, convert — 100% in your browser. Your files never leave your device." />
+<meta property="og:title" content="LocalPix — Edit product photos without uploading them anywhere" />
+<meta property="og:description" content="Local-first image toolkit: remove backgrounds, compress, resize, convert — 100% in your browser. Your files never leave your device." />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://renhongtao2-cell.github.io/localpix/" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="LocalPix — Edit product photos without uploading them anywhere" />
+<meta name="twitter:description" content="Local-first image toolkit: remove backgrounds, compress, resize, convert — 100% in your browser." />
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'><stop offset='0' stop-color='%237C3AED'/><stop offset='1' stop-color='%2306B6D4'/></linearGradient></defs><rect width='32' height='32' rx='8' fill='url(%23g)'/></svg>" />
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "LocalPix",
+  "applicationCategory": "MultimediaApplication",
+  "operatingSystem": "Any (browser)",
+  "url": "https://renhongtao2-cell.github.io/localpix/",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+  "description": "Local-first image toolkit: remove backgrounds, compress, resize, convert — 100% in your browser."
+}
+</script>
 <style>
   :root{
     --purple:#7C3AED;
@@ -119,6 +139,7 @@
   .plan li{font-size:14px;color:var(--muted);display:flex;gap:9px}
   .plan li::before{content:"✓";color:var(--purple);font-weight:800}
   .plan.pro li::before{color:var(--cyan)}
+  .plan li em{font-style:normal;font-size:11px;background:var(--soft);border:1px solid var(--line);border-radius:999px;padding:1px 8px;color:var(--muted);margin-left:4px}
 
   footer{padding:40px 0;border-top:1px solid var(--line);text-align:center;color:var(--muted);font-size:14px;margin-top:30px}
   footer .lock{color:var(--purple);font-weight:700}
@@ -146,7 +167,7 @@
 <header class="hero wrap">
   <div class="pill"><span class="lock">🔒</span> Your files never leave your browser</div>
   <h1>Edit product photos <span class="grad-text">without uploading them anywhere.</span></h1>
-  <p class="sub">A local-first image &amp; video toolkit for ecommerce sellers and creators. Remove backgrounds, resize, compress, convert — right in your browser. No server. No per-image fees. No credits that expire.</p>
+  <p class="sub">A local-first image toolkit for ecommerce sellers and creators. Remove backgrounds, resize, compress, convert — right in your browser. No server. No per-image fees. No credits that expire.</p>
   <div class="hero-cta">
     <a href="#demo" class="btn btn-primary">Start editing — free</a>
     <a href="#pricing" class="btn btn-ghost">See pricing</a>
@@ -231,7 +252,7 @@
   <div class="grid3">
     <div class="feat"><div class="ic">🧹</div><h4>Background removal</h4><p>AI cutout that runs on your device. No server, no per-image fee.</p></div>
     <div class="feat"><div class="ic">🗜️</div><h4>Compress</h4><p>Shrink file size for fast-loading listings without leaving the browser.</p></div>
-    <div class="feat"><div class="ic">📐</div><h4>Resize</h4><p>Batch-fit to marketplace dimensions (Amazon, Etsy, Shopify).</p></div>
+    <div class="feat"><div class="ic">📐</div><h4>Resize</h4><p>Fit to marketplace sizes (Amazon, Etsy, Shopify) in one click.</p></div>
     <div class="feat"><div class="ic">🔄</div><h4>Convert</h4><p>PNG · JPG · WebP — switch formats in one click.</p></div>
     <div class="feat"><div class="ic">♾️</div><h4>Unlimited</h4><p>No credit meter. Export as many as you need, free.</p></div>
     <div class="feat"><div class="ic">🔒</div><h4>Private by design</h4><p>Local-first architecture. Your files never leave your machine.</p></div>
@@ -252,7 +273,7 @@
 <!-- PRICING -->
 <section id="pricing" class="wrap">
   <h2 class="sec-title">Simple pricing</h2>
-  <p class="sec-sub">Start free. Upgrade only when you need batch + video.</p>
+  <p class="sec-sub">Start free. Upgrade to support the project and unlock roadmap features.</p>
   <div class="price-grid">
     <div class="plan">
       <h3>Free</h3>
@@ -270,9 +291,9 @@
       <div class="price">$9<small>/mo</small></div>
       <ul>
         <li>Everything in Free</li>
-        <li>Batch processing</li>
-        <li>Video tools (coming)</li>
-        <li>Priority local AI model</li>
+        <li>Batch / bulk mode <em>(roadmap)</em></li>
+        <li>Video tools <em>(roadmap)</em></li>
+        <li>Early access to new tools</li>
       </ul>
       <a href="https://buy.stripe.com/28E14m3NMdyy9q61Id4wM00" target="_blank" rel="noopener" class="btn btn-primary">Upgrade — $9/mo</a>
     </div>
@@ -368,6 +389,10 @@
       controls.appendChild(lab);
       const b = document.createElement('button'); b.className='btn btn-primary'; b.textContent='Resize'; b.onclick=runResize;
       controls.appendChild(b);
+      const hint = document.createElement('p');
+      hint.style.cssText = 'font-size:12px;color:var(--muted);margin-top:2px';
+      hint.textContent = 'Height auto-adjusts to keep the aspect ratio.';
+      controls.appendChild(hint);
     } else if (currentTool === 'convert'){
       const s = document.createElement('select'); s.id='fmt';
       [['image/png','PNG'],['image/jpeg','JPG'],['image/webp','WebP']].forEach(([v,t])=>{const o=document.createElement('option');o.value=v;o.textContent=t;s.appendChild(o);});
@@ -600,7 +625,7 @@
 
   // init
   if (location.protocol === 'file:') {
-    setStatus('⚠ Opened via file:// — the AI model cannot load this way. Run "python -m http.server" in this folder, then visit http://localhost:8000', true);
+    setStatus('⚠ Opened via file:// — the tools cannot run this way. Run "python -m http.server" in this folder, then visit http://localhost:8000', true);
   }
   renderControls();
 </script>
